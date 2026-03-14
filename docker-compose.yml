@@ -1,0 +1,7 @@
+services:
+  crewai-check:
+    build: .
+    volumes:
+      - .:/app
+    env_file:
+      - .env
