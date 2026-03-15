@@ -1,6 +1,10 @@
 # CrewAI & Gemini マルチエージェントシステム
 
-このプロジェクトは、**CrewAI** と **Google Gemini** モデルを組み合わせた、技術リサーチおよびコンテンツ作成を自動化するマルチエージェントシステムのデモです。
+このリポジトリには、**CrewAI** と **Google Gemini** を組み合わせたマルチエージェントシステムのデモプロジェクトが含まれています。
+
+## 📁 ディレクトリ構成
+- `sample-blog-writer/`: 最初のデモ。技術リサーチからブログ記事作成までを自動化。
+- `gcp-finops-agent/`: Google Cloud の FinOps 運用（コスト分析、最適化提案、報告準備）を自動化。
 
 ## 🚀 はじめかた
 
@@ -9,33 +13,34 @@
 - Docker と Docker Compose がインストールされていることを確認してください。
 
 ### 2. 環境変数の設定
-`.env.example` をコピーして `.env` を作成し、取得した API キーを設定します。
+ルートディレクトリにある `.env.example` をコピーして `.env` を作成し、各項目を設定してください。
 
 ```bash
 cp .env.example .env
 ```
 
-`.env` 内の `GOOGLE_API_KEY` を編集します：
+`.env` の内容（例）：
 ```text
-GOOGLE_API_KEY=あなたのAPIキー
+GOOGLE_API_KEY=あなたのGeminiAPIキー
+GCP_PROJECT_ID=分析対象のプロジェクトID
+BILLING_DATASET_ID=BigQueryの課金データセット名
+FINOPS_REPORT_BUCKET=レポート保存先のGCSバケット名
 ```
 
-### 3. Docker で実行
-ビルドと実行は以下のコマンド一つで行えます：
+### 3. 各エージェントの実行
 
+**Google Cloud FinOps エージェントを実行：**
 ```bash
-docker compose up --build
+docker compose run --rm finops-agent
 ```
 
-## 🧠 プロジェクト構成
-- `main.py`: CrewAI のエージェント、タスク、クルーの定義。
-- `Dockerfile`: アプリケーションのコンテナ定義。
-- `docker-compose.yml`: 環境変数とボリューム設定。
-- `requirements.txt`: 依存ライブラリ（CrewAI, LangChain, Google GenAI）。
+**ブログ記事作成デモを実行：**
+```bash
+docker compose run --rm blog-writer
+```
 
-## 🤖 エージェント紹介
-- **技術リサーチャー**: 特定のトピックに関する最新技術動向を調査し、ポイントをまとめます。
-- **コンテンツストラテジスト**: リサーチ結果を元に、初心者にも分かりやすい Markdown 形式のブログ記事を作成します。
-
-## ⚠️ 注意事項
-このプロジェクトは、実行時の日付設定（2026年など）に合わせ、最適な Gemini モデル（`gemini-flash-latest`）を使用するように構成されています。
+## 🛠️ 技術スタック
+- **Framework**: CrewAI 0.5.0+
+- **LLM**: Google Gemini 1.5 シリーズ (`gemini-flash-latest`)
+- **SDK**: LangChain, Google GenAI SDK
+- **Environment**: Docker, Docker Compose

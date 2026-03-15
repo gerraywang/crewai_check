@@ -1,7 +1,18 @@
 services:
-  crewai-check:
-    build: .
+  # ブログ記事作成サンプル
+  blog-writer:
+    build:
+      context: ./sample-blog-writer
     volumes:
-      - .:/app
+      - ./sample-blog-writer:/app
+    env_file:
+      - .env
+
+  # Google Cloud FinOps エージェント
+  finops-agent:
+    build:
+      context: ./gcp-finops-agent
+    volumes:
+      - ./gcp-finops-agent:/app
     env_file:
       - .env
